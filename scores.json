@@ -1,0 +1,52 @@
+{
+  "Jose": {
+    "wins": 7,
+    "losses": 0,
+    "draws": 2
+  },
+  "Jackie": {
+    "wins": 0,
+    "losses": 3,
+    "draws": 0
+  },
+  "jose": {
+    "wins": 1,
+    "losses": 0,
+    "draws": 3
+  },
+  "Carlos": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 2
+  },
+  "LJ": {
+    "wins": 0,
+    "losses": 1,
+    "draws": 1
+  },
+  "Alfa": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 1
+  },
+  "Omega": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 1
+  },
+  "Hercules": {
+    "wins": 0,
+    "losses": 3,
+    "draws": 0
+  },
+  "Eduardo": {
+    "wins": 0,
+    "losses": 1,
+    "draws": 0
+  },
+  "Hastin": {
+    "wins": 0,
+    "losses": 0,
+    "draws": 2
+  }
+}

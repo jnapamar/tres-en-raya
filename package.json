@@ -1,0 +1,13 @@
+{
+  "name": "tres-en-raya-online-chat-reconn",
+  "version": "1.0.0",
+  "description": "Tres en raya online con usuarios, ranking, chat y reconexión automática",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  }
+}
