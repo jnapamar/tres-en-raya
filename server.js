@@ -241,6 +241,6 @@ io.on('connection', socket => {
   });
 });
 
-http.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+http.listen(PORT, "0.0.0.0", () => {
+  console.log(`🔥 Servidor corriendo en puerto ${PORT}`);
 });
