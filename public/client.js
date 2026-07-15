@@ -1,4 +1,15 @@
-const socket = io();
+https://tres-en-raya-9726.onrender.com
+
+**********
+// CONFIGURACIÓN DE CONEXIÓN:
+// Si estás en producción, cambia esta URL por la dirección real de tu servidor backend en Render.
+// Ej: 'https://mi-servidor-tres-en-raya.onrender.com'
+const https://tres-en-raya-9726.onrender.com = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000' 
+  : 'https://https://tres-en-raya-9726.onrender.com.onrender.com'; // <--- Pon tu URL de backend de Render aquí
+
+// Inicializamos socket.io apuntando a la URL correcta
+const socket = io(https://tres-en-raya-9726.onrender.com);
 
 // DOM
 const nameInput = document.getElementById('nameInput');
@@ -30,9 +41,10 @@ let gameOver = false;
 
 // helpers
 function setInfo(txt){ infoDiv.textContent = txt || ''; }
+
 function renderBoard(winIndices = []) {
   boardDiv.innerHTML = '';
-  for (let i=0;i<9;i++){
+  for (let i = 0; i < 9; i++) {
     const c = document.createElement('div');
     c.className = 'cell' + (gameOver ? ' disabled' : '');
     if (winIndices.includes(i)) c.classList.add('win');
@@ -44,11 +56,16 @@ function renderBoard(winIndices = []) {
 }
 
 function resetUI() {
-  currentRoom = null; mySymbol = null; board = Array(9).fill(null); gameOver=false;
-  roomSection.style.display='none';
-  loginSection.style.display='';
-  roomIdSpan.textContent='—'; mySymbolSpan.textContent='—';
-  player1Span.textContent='—'; player2Span.textContent='—';
+  currentRoom = null; 
+  mySymbol = null; 
+  board = Array(9).fill(null); 
+  gameOver = false;
+  roomSection.style.display = 'none';
+  loginSection.style.display = '';
+  roomIdSpan.textContent = '—'; 
+  mySymbolSpan.textContent = '—';
+  player1Span.textContent = '—'; 
+  player2Span.textContent = '—';
   setInfo('Has salido de la sala.');
 }
 
@@ -122,9 +139,13 @@ showLeaderboardBtn.onclick = () => {
   requestLeaderboard();
   leaderboardBox.style.display = '';
 };
-closeLeaderboard && (closeLeaderboard.onclick = () => {
-  leaderboardBox.style.display = 'none';
-});
+
+if (closeLeaderboard) {
+  closeLeaderboard.onclick = () => {
+    leaderboardBox.style.display = 'none';
+  };
+}
+
 refreshBtn.onclick = () => {
   requestLeaderboard();
   setInfo('Actualizado');
@@ -137,6 +158,7 @@ function requestLeaderboard() {
     }
   });
 }
+
 function renderLeaderboard(list) {
   leaderList.innerHTML = '';
   if (!list || list.length === 0) {
@@ -159,12 +181,12 @@ socket.on('roomUpdate', room => {
   roomIdSpan.textContent = currentRoom || roomIdSpan.textContent;
   mySymbolSpan.textContent = mySymbol || '—';
   document.getElementById('turnInfo').textContent = room.turn || '—';
+  
   // players
-  const sockets = room.sockets || [];
   const players = Object.values(room.players || {});
   player1Span.textContent = players[0] ? `${players[0].username} (${players[0].symbol})` : '—';
   player2Span.textContent = players[1] ? `${players[1].username} (${players[1].symbol})` : '—';
-  if ((players.length < 2)) setInfo('Esperando segundo jugador...');
+  if (players.length < 2) setInfo('Esperando segundo jugador...');
   else setInfo(`Turno: ${room.turn}`);
 });
 
