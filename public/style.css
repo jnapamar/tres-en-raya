@@ -1,5 +1,5 @@
 :root{
-  --bg:#061226;
+  --bg:#0b1220;
   --card:#071033;
   --accent:#2563eb;
   --muted:#9aa7bf;
@@ -9,43 +9,34 @@
 body{
   margin:0;
   font-family:Inter, Arial, sans-serif;
-  background:linear-gradient(180deg,#021224 0%, #081226 100%);
+  background:linear-gradient(180deg,#031026 0%, #081226 100%);
   color:var(--text);
   display:flex;
   min-height:100vh;
   align-items:center;
   justify-content:center;
-  padding:18px;
+  padding:20px;
 }
-.app{width:100%;max-width:1100px}
-header{ text-align:center; margin-bottom:14px }
-h1{ margin:0; font-size:26px }
+.app{width:100%;max-width:980px}
+header{ text-align:center; margin-bottom:18px }
+h1{ margin:0; font-size:28px }
 .subtitle{ margin:6px 0 0; color:var(--muted) }
 
 .card{
   background:var(--card);
   border:1px solid rgba(255,255,255,0.03);
-  padding:12px;
+  padding:14px;
   border-radius:10px;
   margin-bottom:12px;
 }
 
-/* Layout */
-main{
-  display:grid;
-  grid-template-columns: 1fr 360px;
-  gap:14px;
-  align-items:start;
-}
+main{ display:grid; grid-template-columns: 1fr 380px; gap:14px; align-items:start; }
 
-/* Left column */
+input{ padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:var(--text) }
+button{ padding:8px 12px; border-radius:8px; border:0; background:var(--accent); color:white; cursor:pointer }
 .row{ display:flex; gap:8px; align-items:center; margin-top:8px }
 .row.between{ display:flex; justify-content:space-between; align-items:center }
 
-input, textarea{ padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:var(--text) }
-button{ padding:8px 12px; border-radius:8px; border:0; background:var(--accent); color:white; cursor:pointer }
-
-/* Board */
 .board{ display:grid; grid-template-columns:repeat(3,120px); gap:10px; justify-content:center; margin:16px 0; }
 .cell{
   width:120px; height:120px; display:flex; align-items:center; justify-content:center;
@@ -53,25 +44,16 @@ button{ padding:8px 12px; border-radius:8px; border:0; background:var(--accent);
   border:2px solid rgba(255,255,255,0.03); cursor:pointer; user-select:none;
 }
 .cell.disabled{ pointer-events:none; opacity:0.5 }
-.cell.win { box-shadow: 0 10px 20px rgba(37,99,235,0.12); transform:scale(1.04); transition:transform .18s }
+.cell.win { box-shadow: 0 8px 18px rgba(37,99,235,0.12); transform:scale(1.04); transition:transform .18s }
 
-/* Sidebar chat */
-.sidebar { display:flex; flex-direction:column; gap:10px; padding:10px; }
-.chatBox { background: rgba(255,255,255,0.01); border-radius:8px; padding:8px; height:420px; overflow:auto; border:1px solid rgba(255,255,255,0.03) }
-.chatMessage { margin-bottom:8px; }
-.chatMessage .who { font-weight:600; color:var(--accent); margin-right:6px }
-.chatMessage .time { font-size:12px; color:var(--muted); margin-left:6px }
+.info{ color:var(--muted); margin-left:10px; }
 
-.chatControls { display:flex; gap:8px; align-items:center; }
-.chatControls input { flex:1 }
-
-/* Responsive: move chat below on small screens */
-@media (max-width:900px){
-  main{ grid-template-columns: 1fr; }
-  .sidebar { order:2 }
-  .chatBox { height:220px }
-  .board{ grid-template-columns:repeat(3,86px); gap:8px }
-  .cell{ width:86px;height:86px;font-size:34px }
-}
+.leaderboard{ max-height:360px; overflow:auto }
+ol{ padding-left:18px; margin:8px 0 }
 .small{ font-size:13px; color:var(--muted) }
 footer{ text-align:center; margin-top:8px; color:var(--muted) }
+@media (max-width:900px){
+  main{ grid-template-columns: 1fr; }
+  .board{ grid-template-columns:repeat(3,80px); }
+  .cell{ width:80px;height:80px;font-size:32px }
+}
