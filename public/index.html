@@ -3,76 +3,64 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Tres en Raya — Chat & Reconexión</title>
+  <title>Tres en Raya — Usuarios & Ranking</title>
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div class="app">
     <header>
       <h1>Tres en Raya Online</h1>
-      <p class="subtitle">Usuarios, ranking, chat lateral y reconexión automática</p>
+      <p class="subtitle">Juega con amigos — Usuarios y ranking integrado</p>
     </header>
 
     <main>
-      <section id="left" class="card">
-        <div id="loginSection">
-          <h2>Entra con tu nombre</h2>
-          <input id="nameInput" placeholder="Tu nombre (ej. José)" maxlength="20" />
-          <div class="row">
-            <button id="createBtn">Crear sala</button>
-            <input id="roomInput" placeholder="Código de sala (6 chars)" />
-            <button id="joinBtn">Unirse</button>
-          </div>
-          <div class="row small">
-            <button id="showLeaderboardBtn">Ver Ranking</button>
-            <button id="refreshBtn" title="Refrescar ranking">Actualizar</button>
-          </div>
+      <section id="loginSection" class="card">
+        <h2>Entra con tu nombre</h2>
+        <input id="nameInput" placeholder="Tu nombre (ej. José)" maxlength="20" />
+        <div class="row">
+          <button id="createBtn">Crear sala</button>
+          <input id="roomInput" placeholder="Código de sala (6 chars)" />
+          <button id="joinBtn">Unirse</button>
         </div>
-
-        <div id="roomSection" style="display:none;">
-          <div class="row between">
-            <div>
-              <div><strong>Sala:</strong> <span id="roomId">—</span></div>
-              <div><strong>Tu símbolo:</strong> <span id="mySymbol">—</span></div>
-              <div class="small">Turno: <span id="turnInfo">—</span></div>
-            </div>
-            <div>
-              <div><strong>Jugador 1:</strong> <span id="player1">—</span></div>
-              <div><strong>Jugador 2:</strong> <span id="player2">—</span></div>
-            </div>
-          </div>
-
-          <div id="board" class="board"></div>
-
-          <div class="row" style="margin-top:12px;">
-            <button id="rematchBtn">Pedir revancha</button>
-            <button id="leaveBtn">Salir</button>
-            <div id="info" class="info"></div>
-          </div>
+        <div class="row small">
+          <button id="showLeaderboardBtn">Ver Ranking</button>
+          <button id="refreshBtn" title="Refrescar ranking y estado">Actualizar</button>
         </div>
       </section>
 
-      <aside id="right" class="card sidebar">
-        <div class="sidebar-top">
-          <h3>Chat de la sala</h3>
-          <div id="chatBox" class="chatBox"></div>
+      <section id="roomSection" class="card" style="display:none;">
+        <div class="row between">
+          <div>
+            <div><strong>Sala:</strong> <span id="roomId">—</span></div>
+            <div><strong>Tu símbolo:</strong> <span id="mySymbol">—</span></div>
+            <div class="small">Turno: <span id="turnInfo">—</span></div>
+          </div>
+          <div>
+            <div><strong>Jugador 1:</strong> <span id="player1">—</span></div>
+            <div><strong>Jugador 2:</strong> <span id="player2">—</span></div>
+          </div>
         </div>
 
-        <div class="chatControls">
-          <input id="chatInput" placeholder="Escribe un mensaje..." maxlength="300" />
-          <button id="sendChatBtn">Enviar</button>
-        </div>
+        <div id="board" class="board"></div>
 
-        <div class="leaderboard card small" id="leaderboard" style="display:none;">
-          <h3>Ranking (Top 10)</h3>
-          <ol id="leaderList"></ol>
-          <div class="small">Puntos = wins*3 + draws. <button id="closeLeaderboard">Cerrar</button></div>
+        <div class="row" style="margin-top:12px;">
+          <button id="rematchBtn">Pedir revancha</button>
+          <button id="leaveBtn">Salir</button>
+          <div id="info" class="info"></div>
+        </div>
+      </section>
+
+      <aside id="leaderboard" class="card" style="display:none;">
+        <h3>Ranking (Top 10)</h3>
+        <ol id="leaderList"></ol>
+        <div class="small">
+          Puntos = wins*3 + draws. <button id="closeLeaderboard">Cerrar</button>
         </div>
       </aside>
     </main>
 
     <footer>
-      <div class="small">Comparte el código de sala con un amigo. Para jugar desde otra red usa Ngrok o deploy en hosting.</div>
+      <div class="small">Comparte el código de sala con un amigo. Soporta Ngrok o deploy en hosting.</div>
     </footer>
   </div>
 
