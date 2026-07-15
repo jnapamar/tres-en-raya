@@ -1,10 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Tres en Raya — Usuarios & Ranking</title>
-  <link rel="stylesheet" href="/style.css" />
+  <!-- Corregido: ruta relativa para que cargue siempre bien en Render -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="app">
@@ -64,7 +65,10 @@
     </footer>
   </div>
 
+  <!-- IMPORTANTE: El script de socket.io usualmente se sirve desde el backend si tienes uno. 
+       Si vas a usar un servidor backend separado, en client.js definiremos a dónde conectarse. -->
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/client.js"></script>
+  <!-- Corregido: ruta relativa sin la barra inicial -->
+  <script src="client.js"></script>
 </body>
 </html>
