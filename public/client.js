@@ -1,6 +1,5 @@
-https://tres-en-raya-9726.onrender.com
+//https://tres-en-raya-9726.onrender.com
 
-**********
 // CONFIGURACIÓN DE CONEXIÓN:
 // Si estás en producción, cambia esta URL por la dirección real de tu servidor backend en Render.
 // Ej: 'https://mi-servidor-tres-en-raya.onrender.com'
