@@ -19,7 +19,7 @@ const SCORES_FILE = path.join(__dirname, 'scores.json');
 app.use(cors());
 app.use(express.json());
 
-// Servir la carpeta estática 'Public' (P mayúscula obligatoria para Linux/Render)
+// Servir la carpeta estática 'Public' (P mayúscula _obligatoria para Linux/Render)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // --- Rutas de navegación ---
