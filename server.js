@@ -109,6 +109,22 @@ const rooms = {};
 io.on('connection', socket => {
     console.log('Nuevo cliente conectado:', socket.id);
 
+// Evento para enviar y transmitir mensajes del chat
+  socket.on('sendChatMessage', ({ roomId, message }) => {
+    const room = rooms[roomId]; // O el objeto/mapa donde guardes tus salas
+    if (!room) return;
+
+    // Obtener el nombre del jugador que envía el mensaje
+    const player = room.players[socket.id];
+    const senderName = player ? player.username : 'Anónimo';
+
+    // Retransmitir el mensaje a TODOS en la sala
+    io.to(roomId).emit('chatMessage', {
+      sender: senderName,
+      message: message
+    });
+  });
+    
     // Crear Sala
     socket.on('createRoom', (username, callback) => {
         username = (username || 'Anon').trim().slice(0, 20);
