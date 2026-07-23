@@ -233,3 +233,35 @@ socket.on('rematch', room => {
 // Carga Inicial
 renderBoard();
 requestLeaderboard();
+
+// --- LÓGICA DE CHAT ---
+const chatInput = document.getElementById('chatInput');
+const sendChatBtn = document.getElementById('sendChatBtn');
+const chatMessages = document.getElementById('chatMessages');
+
+function sendChatMessage() {
+  const text = (chatInput.value || '').trim();
+  if (!text || !currentRoom) return;
+
+  socket.emit('sendChatMessage', { roomId: currentRoom, message: text });
+  chatInput.value = '';
+}
+
+if (sendChatBtn) {
+  sendChatBtn.onclick = sendChatMessage;
+}
+
+if (chatInput) {
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendChatMessage();
+  });
+}
+
+// Recibir mensajes del servidor
+socket.on('chatMessage', ({ sender, message }) => {
+  if (!chatMessages) return;
+  const msgDiv = document.createElement('div');
+  msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+  chatMessages.appendChild(msgDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll al final
+});
