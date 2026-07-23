@@ -1,16 +1,8 @@
-//https://tres-en-raya-9726.onrender.com
+// Inicializamos socket.io. 
+// Al estar hospedado en Render, io() detecta automáticamente el dominio actual.
+const socket = io();
 
-// CONFIGURACIÓN DE CONEXIÓN:
-// Si estás en producción, cambia esta URL por la dirección real de tu servidor backend en Render.
-// Ej: 'https://mi-servidor-tres-en-raya.onrender.com'
-const https://tres-en-raya-9726.onrender.com = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:3000' 
-  : 'https://https://tres-en-raya-9726.onrender.com.onrender.com'; // <--- Pon tu URL de backend de Render aquí
-
-// Inicializamos socket.io apuntando a la URL correcta
-const socket = io(https://tres-en-raya-9726.onrender.com);
-
-// DOM
+// Elementos del DOM
 const nameInput = document.getElementById('nameInput');
 const createBtn = document.getElementById('createBtn');
 const joinBtn = document.getElementById('joinBtn');
@@ -38,10 +30,13 @@ let mySymbol = null;
 let board = Array(9).fill(null);
 let gameOver = false;
 
-// helpers
-function setInfo(txt){ infoDiv.textContent = txt || ''; }
+// Funciones Auxiliares
+function setInfo(txt) { 
+  if (infoDiv) infoDiv.textContent = txt || ''; 
+}
 
 function renderBoard(winIndices = []) {
+  if (!boardDiv) return;
   boardDiv.innerHTML = '';
   for (let i = 0; i < 9; i++) {
     const c = document.createElement('div');
@@ -59,96 +54,119 @@ function resetUI() {
   mySymbol = null; 
   board = Array(9).fill(null); 
   gameOver = false;
-  roomSection.style.display = 'none';
-  loginSection.style.display = '';
-  roomIdSpan.textContent = '—'; 
-  mySymbolSpan.textContent = '—';
-  player1Span.textContent = '—'; 
-  player2Span.textContent = '—';
+  
+  if (roomSection) roomSection.style.display = 'none';
+  if (loginSection) loginSection.style.display = '';
+  if (roomIdSpan) roomIdSpan.textContent = '—'; 
+  if (mySymbolSpan) mySymbolSpan.textContent = '—';
+  if (player1Span) player1Span.textContent = '—'; 
+  if (player2Span) player2Span.textContent = '—';
+  
   setInfo('Has salido de la sala.');
 }
 
-// actions
-createBtn.onclick = () => {
-  const name = (nameInput.value || 'Anon').trim();
-  if (!name) return alert('Ingresa tu nombre');
-  socket.emit('createRoom', name, res => {
-    if (res.ok) {
-      currentRoom = res.roomId;
-      mySymbol = res.symbol;
-      roomIdSpan.textContent = currentRoom;
-      mySymbolSpan.textContent = mySymbol;
-      roomSection.style.display = '';
-      loginSection.style.display = 'none';
-      setInfo('Sala creada. Comparte el código con un amigo.');
-      board = Array(9).fill(null);
-      gameOver = false;
-      renderBoard();
-      requestLeaderboard();
-    } else {
-      alert('Error creando sala');
-    }
-  });
-};
+// Eventos de los Botones
 
-joinBtn.onclick = () => {
-  const name = (nameInput.value || 'Anon').trim();
-  const r = (roomInput.value || '').trim().toUpperCase();
-  if (!name) return alert('Ingresa tu nombre');
-  if (!r) return alert('Ingresa código de sala');
-  socket.emit('joinRoom', r, name, res => {
-    if (res.ok) {
-      currentRoom = res.roomId;
-      mySymbol = res.symbol;
-      roomIdSpan.textContent = currentRoom;
-      mySymbolSpan.textContent = mySymbol;
-      roomSection.style.display = '';
-      loginSection.style.display = 'none';
-      setInfo('Conectado. Espera a que ambos jugadores estén listos.');
-      board = Array(9).fill(null);
-      gameOver = false;
-      renderBoard();
-      requestLeaderboard();
-    } else {
-      alert(res.error || 'No se pudo unir');
-    }
-  });
-};
-
-function tryMove(index){
-  if (!currentRoom || gameOver) return;
-  socket.emit('move', { roomId: currentRoom, index }, res => {
-    if (!res.ok) setInfo(res.error || 'Movimiento no válido');
-  });
-}
-
-rematchBtn.onclick = () => {
-  if (!currentRoom) return;
-  socket.emit('requestRematch', currentRoom);
-};
-
-leaveBtn.onclick = () => {
-  if (!currentRoom) return;
-  socket.emit('leaveRoom', currentRoom);
-  resetUI();
-};
-
-// leaderboard UI
-showLeaderboardBtn.onclick = () => {
-  requestLeaderboard();
-  leaderboardBox.style.display = '';
-};
-
-if (closeLeaderboard) {
-  closeLeaderboard.onclick = () => {
-    leaderboardBox.style.display = 'none';
+// 1. Crear Sala
+if (createBtn) {
+  createBtn.onclick = () => {
+    const name = (nameInput.value || 'Anon').trim();
+    if (!name) return alert('Ingresa tu nombre');
+    
+    socket.emit('createRoom', name, res => {
+      if (res && res.ok) {
+        currentRoom = res.roomId;
+        mySymbol = res.symbol;
+        if (roomIdSpan) roomIdSpan.textContent = currentRoom;
+        if (mySymbolSpan) mySymbolSpan.textContent = mySymbol;
+        
+        if (roomSection) roomSection.style.display = '';
+        if (loginSection) loginSection.style.display = 'none';
+        
+        setInfo('Sala creada. Comparte el código con un amigo.');
+        board = Array(9).fill(null);
+        gameOver = false;
+        renderBoard();
+        requestLeaderboard();
+      } else {
+        alert('Error creando sala');
+      }
+    });
   };
 }
 
-refreshBtn.onclick = () => {
-  requestLeaderboard();
-  setInfo('Actualizado');
-};
+// 2. Unirse a Sala
+if (joinBtn) {
+  joinBtn.onclick = () => {
+    const name = (nameInput.value || 'Anon').trim();
+    const r = (roomInput.value || '').trim().toUpperCase();
+    if (!name) return alert('Ingresa tu nombre');
+    if (!r) return alert('Ingresa código de sala');
+    
+    socket.emit('joinRoom', r, name, res => {
+      if (res && res.ok) {
+        currentRoom = res.roomId;
+        mySymbol = res.symbol;
+        if (roomIdSpan) roomIdSpan.textContent = currentRoom;
+        if (mySymbolSpan) mySymbolSpan.textContent = mySymbol;
+        
+        if (roomSection) roomSection.style.display = '';
+        if (loginSection) loginSection.style.display = 'none';
+        
+        setInfo('Conectado. Espera a que ambos jugadores estén listos.');
+        board = Array(9).fill(null);
+        gameOver = false;
+        renderBoard();
+        requestLeaderboard();
+      } else {
+        alert(res.error || 'No se pudo unir');
+      }
+    });
+  };
+}
+
+function tryMove(index) {
+  if (!currentRoom || gameOver) return;
+  socket.emit('move', { roomId: currentRoom, index }, res => {
+    if (res && !res.ok) setInfo(res.error || 'Movimiento no válido');
+  });
+}
+
+if (rematchBtn) {
+  rematchBtn.onclick = () => {
+    if (!currentRoom) return;
+    socket.emit('requestRematch', currentRoom);
+  };
+}
+
+if (leaveBtn) {
+  leaveBtn.onclick = () => {
+    if (!currentRoom) return;
+    socket.emit('leaveRoom', currentRoom);
+    resetUI();
+  };
+}
+
+// 3. Menú de Ranking
+if (showLeaderboardBtn) {
+  showLeaderboardBtn.onclick = () => {
+    requestLeaderboard();
+    if (leaderboardBox) leaderboardBox.style.display = '';
+  };
+}
+
+if (closeLeaderboard) {
+  closeLeaderboard.onclick = () => {
+    if (leaderboardBox) leaderboardBox.style.display = 'none';
+  };
+}
+
+if (refreshBtn) {
+  refreshBtn.onclick = () => {
+    requestLeaderboard();
+    setInfo('Actualizado');
+  };
+}
 
 function requestLeaderboard() {
   socket.emit('getLeaderboard', 10, res => {
@@ -159,6 +177,7 @@ function requestLeaderboard() {
 }
 
 function renderLeaderboard(list) {
+  if (!leaderList) return;
   leaderList.innerHTML = '';
   if (!list || list.length === 0) {
     leaderList.innerHTML = '<li>No hay jugadores aún</li>';
@@ -171,20 +190,23 @@ function renderLeaderboard(list) {
   });
 }
 
-// socket listeners
+// Escuchadores de eventos de Socket.io
 socket.on('roomUpdate', room => {
   if (!room) return;
   board = room.board;
   gameOver = false;
   renderBoard();
-  roomIdSpan.textContent = currentRoom || roomIdSpan.textContent;
-  mySymbolSpan.textContent = mySymbol || '—';
-  document.getElementById('turnInfo').textContent = room.turn || '—';
   
-  // players
+  if (roomIdSpan) roomIdSpan.textContent = currentRoom || roomIdSpan.textContent;
+  if (mySymbolSpan) mySymbolSpan.textContent = mySymbol || '—';
+  
+  const turnInfo = document.getElementById('turnInfo');
+  if (turnInfo) turnInfo.textContent = room.turn || '—';
+  
   const players = Object.values(room.players || {});
-  player1Span.textContent = players[0] ? `${players[0].username} (${players[0].symbol})` : '—';
-  player2Span.textContent = players[1] ? `${players[1].username} (${players[1].symbol})` : '—';
+  if (player1Span) player1Span.textContent = players[0] ? `${players[0].username} (${players[0].symbol})` : '—';
+  if (player2Span) player2Span.textContent = players[1] ? `${players[1].username} (${players[1].symbol})` : '—';
+  
   if (players.length < 2) setInfo('Esperando segundo jugador...');
   else setInfo(`Turno: ${room.turn}`);
 });
@@ -200,7 +222,6 @@ socket.on('gameOver', ({ winner, board: b, winnerName }) => {
   requestLeaderboard();
 });
 
-// rematch resets board
 socket.on('rematch', room => {
   if (!room) return;
   board = room.board;
@@ -209,6 +230,6 @@ socket.on('rematch', room => {
   setInfo('Revancha iniciada. Empieza X.');
 });
 
-// on initial load
+// Carga Inicial
 renderBoard();
 requestLeaderboard();
