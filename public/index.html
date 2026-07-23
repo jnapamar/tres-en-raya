@@ -2,9 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tres en Raya — Usuarios & Ranking</title>
-  <!-- Corregido: ruta relativa para que cargue siempre bien en Render -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,6 +14,7 @@
     </header>
 
     <main>
+      <!-- Sección de Entrada / Login -->
       <section id="loginSection" class="card">
         <h2>Entra con tu nombre</h2>
         <input id="nameInput" placeholder="Tu nombre (ej. José)" maxlength="20" />
@@ -29,6 +29,7 @@
         </div>
       </section>
 
+      <!-- Sección del Juego y Tablero -->
       <section id="roomSection" class="card" style="display:none;">
         <div class="row between">
           <div>
@@ -51,24 +52,25 @@
         </div>
       </section>
 
+      <!-- Panel de Ranking -->
       <aside id="leaderboard" class="card" style="display:none;">
         <h3>Ranking (Top 10)</h3>
         <ol id="leaderList"></ol>
         <div class="small">
-          Puntos = wins*3 + draws. <button id="closeLeaderboard">Cerrar</button>
+          Puntos = victorias*3 + empates. <button id="closeLeaderboard">Cerrar</button>
         </div>
       </aside>
     </main>
 
     <footer>
-      <div class="small">Comparte el código de sala con un amigo. Soporta Ngrok o deploy en hosting.</div>
+      <div class="small">Comparte el código de sala con un amigo para jugar en línea.</div>
     </footer>
   </div>
 
-  <!-- IMPORTANTE: El script de socket.io usualmente se sirve desde el backend si tienes uno. 
-       Si vas a usar un servidor backend separado, en client.js definiremos a dónde conectarse. -->
+  <!-- Cliente Socket.io (Servido por Node.js / Express) -->
   <script src="/socket.io/socket.io.js"></script>
-  <!-- Corregido: ruta relativa sin la barra inicial -->
-  <script src="client.js"></script>
+
+  <!-- Script principal del cliente (Respetando 'Client.js' con C mayúscula) -->
+  <script src="Client.js"></script>
 </body>
 </html>
