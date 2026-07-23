@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tres en Raya</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .contenedor-juego {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .estado-turno {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .tablero {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .celda {
+            width: 90px;
+            height: 90px;
+            background-color: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 36px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .celda:hover {
+            background-color: #e9ecef;
+        }
+
+        .celda:active {
+            transform: scale(0.98);
+        }
+
+        .celda.x {
+            color: #dc3545; /* Rojo */
+        }
+
+        .celda.o {
+            color: #28a745; /* Verde */
+        }
+
+        .btn-reiniciar {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .btn-reiniciar:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor-juego">
+    <h1>Tres en Raya</h1>
+    <div id="estado" class="estado-turno">Turno de: X</div>
+    
+    <div class="tablero" id="tablero">
+        <div class="celda" data-indice="0"></div>
+        <div class="celda" data-indice="1"></div>
+        <div class="celda" data-indice="2"></div>
+        <div class="celda" data-indice="3"></div>
+        <div class="celda" data-indice="4"></div>
+        <div class="celda" data-indice="5"></div>
+        <div class="celda" data-indice="6"></div>
+        <div class="celda" data-indice="7"></div>
+        <div class="celda" data-indice="8"></div>
+    </div>
+
+    <button class="btn-reiniciar" onclick="reiniciarJuego()">🔄 Reiniciar Juego</button>
+</div>
+
+<script>
+    let tableroEstado = ["", "", "", "", "", "", "", "", ""];
+    let turnoActual = "X";
+    let juegoActivo = true;
+
+    const mensajeEstado = document.getElementById('estado');
+    const celdas = document.querySelectorAll('.celda');
+
+    const combinacionesGanadoras = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Filas
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columnas
+        [0, 4, 8], [2, 4, 6]             // Diagonales
+    ];
+
+    celdas.forEach(celda => {
+        celda.addEventListener('click', manejarClickCelda);
+    });
+
+    function manejarClickCelda(e) {
+        const celdaClickeada = e.target;
+        const indice = parseInt(celdaClickeada.getAttribute('data-indice'));
+
+        if (tableroEstado[indice] !== "" || !juegoActivo) {
+            return;
+        }
+
+        actualizarCelda(celdaClickeada, indice);
+        verificarResultado();
+    }
+
+    function actualizarCelda(celda, indice) {
+        tableroEstado[indice] = turnoActual;
+        celda.textContent = turnoActual;
+        celda.classList.add(turnoActual.toLowerCase());
+    }
+
+    function cambiarTurno() {
+        turnoActual = turnoActual === "X" ? "O" : "X";
+        mensajeEstado.textContent = `Turno de: ${turnoActual}`;
+    }
+
+    function verificarResultado() {
+        let hayGanador = false;
+
+        for (let i = 0; i < combinacionesGanadoras.length; i++) {
+            const [a, b, c] = combinacionesGanadoras[i];
+            if (tableroEstado[a] && tableroEstado[a] === tableroEstado[b] && tableroEstado[a] === tableroEstado[c]) {
+                hayGanador = true;
+                break;
+            }
+        }
+
+        if (hayGanador) {
+            mensajeEstado.textContent = `🎉 ¡El jugador ${turnoActual} ha ganado!`;
+            juegoActivo = false;
+            return;
+        }
+
+        // Verificar si hay empate
+        if (!tableroEstado.includes("")) {
+            mensajeEstado.textContent = "🤝 ¡Empate!";
+            juegoActivo = false;
+            return;
+        }
+
+        cambiarTurno();
+    }
+
+    function reiniciarJuego() {
+        tableroEstado = ["", "", "", "", "", "", "", "", ""];
+        juegoActivo = true;
+        turnoActual = "X";
+        mensajeEstado.textContent = "Turno de: X";
+
+        celdas.forEach(celda => {
+            celda.textContent = "";
+            celda.classList.remove('x', 'o');
+        });
+    }
+</script>
+
+</body>
+</html>
