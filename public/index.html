@@ -50,6 +50,17 @@
           <button id="leaveBtn">Salir</button>
           <div id="info" class="info"></div>
         </div>
+
+        <!-- Sección de Chat Integrada -->
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ccc;" />
+        <div id="chatSection">
+          <h3>Chat de Sala</h3>
+          <div id="chatMessages" style="height: 120px; overflow-y: auto; background: rgba(0,0,0,0.05); padding: 8px; border-radius: 6px; margin-bottom: 8px; text-align: left; font-size: 0.9em;"></div>
+          <div class="row">
+            <input id="chatInput" placeholder="Escribe un mensaje..." style="flex: 1;" />
+            <button id="sendChatBtn">Enviar</button>
+          </div>
+        </div>
       </section>
 
       <!-- Panel de Ranking -->
@@ -67,10 +78,10 @@
     </footer>
   </div>
 
-  <!-- Carga de Socket.io mediante CDN (garantiza compatibilidad en Render) -->
+  <!-- Carga de Socket.io mediante CDN (Garantiza estabilidad en Render) -->
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
-  <!-- Script principal del cliente (Asegúrate de que en GitHub se llame client.js o Client.js según esté escrito aquí) -->
+  <!-- Script principal del cliente -->
   <script src="client.js"></script>
 </body>
 </html>
